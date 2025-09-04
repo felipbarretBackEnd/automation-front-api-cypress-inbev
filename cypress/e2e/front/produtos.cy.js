@@ -10,23 +10,15 @@ describe('Funcionalidade: Produtos', () => {
         cy.loginComNovoUser()
     })
 
-      afterEach(() => {
-        //cy.screenshot()
-    })
-
     it('Deve buscar um produto com sucesso', function() {
         produtoPage.capturaProduto().then((produto) => {
             cy.get('@user').then(({ email }) =>{
                 cy.log(`Usuário comum logado: ${email}`);
             })
-
             const nome = produto.trim();
             produtoPage.buscarProduto(nome);
             cy.contains('h5.card-title.negrito', nome).should('be.visible');
         })
-        
-        //cy.get('h4').should('contain', 'Produtos');
-
     })
     
     it('Deve adicionar um produto ao carrinho com sucesso', () => {

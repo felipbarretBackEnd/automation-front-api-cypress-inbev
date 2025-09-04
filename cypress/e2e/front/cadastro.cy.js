@@ -13,10 +13,6 @@ describe('Funcionalidade: Cadastro', () => {
         cy.visit('/')
     });
 
-    afterEach(() => {
-        //cy.screenshot()
-    })
-
     it('Deve cadastrar Usuário Comum com sucesso.', () => {
         cadastroPage.cadastrarUsuario(nome, email, senha)
         cy.get('.alert-link').should('contain', 'Cadastro realizado com sucesso')
@@ -25,6 +21,7 @@ describe('Funcionalidade: Cadastro', () => {
     it('Fluxo negativo - Deve exibir mensagem de erro ao cadastrar usuário já cadastrado.', () => {
         cadastroPage.cadastrarUsuario(nome, email, senha)
         cy.get('.alert').should('contain', 'Este email já está sendo usado')
+        
     })
 
     it('Deve cadastrar Admin com sucesso.', () => {

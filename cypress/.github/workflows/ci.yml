@@ -1,0 +1,55 @@
+name: CI - Cypress InBev (API & Front)
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+    inputs:
+      suite:
+        description: "Qual suíte rodar?"
+        required: true
+        default: "all"
+        type: choice
+        options:
+          - all
+          - api
+          - front 
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install deps
+        run: npm ci
+      
+      - name: Show Cypress version
+        run: npx cypress --version
+
+      - name: Run Cypress
+        run: |
+          if [ "${{ github.event.inputs.suite }}" = "api" ]; then
+            npx cypress run --spec "cypress/e2e/api/**/*"
+          elif [ "${{ github.event.inputs.suite }}" = "front" ]; then
+            npx cypress run --spec "cypress/e2e/front/**/*"
+          else
+            npm test
+          fi
+
+      - name: Upload screenshots (if any)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cypress-screenshots
+          path: cypress/screenshots
+          if-no-files-found: ignore

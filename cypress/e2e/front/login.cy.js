@@ -9,10 +9,6 @@ describe('Funcionalidade: Login', () => {
         cy.visit('/')
     });
 
-    afterEach(() => {
-        //cy.screenshot()
-    })
-
     it('Deve Logar com sucesso', function() {
         const {email, psw} = this.user;
         loginPage.logar(email, psw)
